@@ -66,13 +66,3 @@ vms_mod = {
 
   }
 }
-
-nsg_mod = {
-  nsg1 = {
-    nsg_name    = "nsg-dev"
-    location    = "eastus"
-    rg_name     = "rg-dev-01"
-    subnet_name = "subnet-dev-01"
-    vnet_name   = "vnet-dev-01"
-  }
-}
