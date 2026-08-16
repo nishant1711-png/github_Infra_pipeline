@@ -12,6 +12,11 @@ rg_mod = {
     rg_name  = "rg-dev-04"
     location = "eastus"
   }
+
+   rg5 = {
+    rg_name  = "rg-dev-05"
+    location = "eastus"
+  }
 }
 
 vnet_mod = {
