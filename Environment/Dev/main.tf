@@ -20,9 +20,3 @@ module "virtual_machine" {
   depends_on = [module.subnet]
   vms        = var.vms_mod
 }
-
-module "nsg" {
-  source     = "../../Child_Modules/azurerm_network_security_group"
-  depends_on = [module.subnet]
-  nsgs       = var.nsg_mod
-}

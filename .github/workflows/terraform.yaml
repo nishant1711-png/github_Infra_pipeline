@@ -1,0 +1,92 @@
+name: Terraform Dev
+
+on:
+
+  # Feature branch par push -> Terraform Plan
+  push:
+    branches:
+      - feature/rg-new
+    paths:
+      - 'Environment/Dev/**'
+
+  # PR -> main -> Terraform Plan
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'Environment/Dev/**'
+
+  # Manual execution
+  workflow_dispatch:
+
+
+permissions:
+  contents: read
+
+
+jobs:
+
+  terraform-plan:
+    name: Terraform Plan
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+
+      - name: Azure Login
+        uses: azure/login@v2
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Terraform Init
+        working-directory: ./Environment/Dev
+        run: terraform init
+
+      - name: Terraform Format Check
+        working-directory: ./Environment/Dev
+        run: terraform fmt -check
+
+      - name: Terraform Validate
+        working-directory: ./Environment/Dev
+        run: terraform validate
+
+      - name: Terraform Plan
+        working-directory: ./Environment/Dev
+        run: terraform plan
+
+
+  terraform-apply:
+    name: Terraform Apply
+    runs-on: ubuntu-latest
+
+    # Apply ONLY when code is pushed to main
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+
+    # Plan must succeed first
+    needs: terraform-plan
+
+    steps:
+
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+
+      - name: Azure Login
+        uses: azure/login@v2
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Terraform Init
+        working-directory: ./Environment/Dev
+        run: terraform init
+
+      - name: Terraform Apply
+        working-directory: ./Environment/Dev
+        run: terraform apply -auto-approve
