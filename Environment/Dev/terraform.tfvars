@@ -8,13 +8,13 @@ rg_mod = {
     location = "eastus"
   }
 
-  rg3 = {
-    rg_name  = "rg-dev-04"
+  rg5 = {
+    rg_name  = "rg-dev-05"
     location = "eastus"
   }
 
-   rg5 = {
-    rg_name  = "rg-dev-05"
+  rg3 = {
+    rg_name  = "rg-dev-04"
     location = "eastus"
   }
 }
